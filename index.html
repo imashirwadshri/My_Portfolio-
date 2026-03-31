@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ashirwad Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins', sans-serif;}
+
+    body{background:#ffffff;color:#111;overflow:hidden;}
+
+    canvas{position:fixed;top:0;left:0;z-index:-1;}
+
+    /* cursor */
+    .cursor-glow{
+      width:8px;height:8px;border-radius:50%;
+      position:fixed;pointer-events:none;
+      background:#ffffff;
+      transform:translate(-50%,-50%);
+      z-index:1000;
+      box-shadow:0 0 8px #fff, 0 0 16px rgba(255,255,255,0.7);
+      mix-blend-mode:difference;
+    }
+
+    .cursor-ring{
+      width:30px;height:30px;
+      border:2px solid rgba(255,255,255,0.9);
+      border-radius:50%;
+      position:fixed;
+      pointer-events:none;
+      transform:translate(-50%,-50%);
+      z-index:999;
+      mix-blend-mode:difference;
+    }
+
+    /* 🔥 space fix */
+    header{display:flex;justify-content:space-between;align-items:center;padding:5px 60px;}
+
+    header h1{font-size:32px;font-weight:700;color:#1e3a8a;}
+
+    nav a{margin:0 18px;text-decoration:none;color:#555;font-weight:600;font-size:18px;position:relative;transition:0.3s;}
+    nav a::after{content:"";position:absolute;width:0;height:2px;background:#2563eb;left:0;bottom:-4px;transition:0.3s;}
+    nav a:hover::after{width:100%;}
+    nav a:hover{color:#2563eb;}
+
+    .container{display:flex;align-items:center;justify-content:space-between;padding:20px 60px;}
+
+    .left{max-width:50%;margin-top:-20px;} /* 🔥 remove extra gap */
+
+    .tag{color:#2563eb;margin-bottom:12px;font-size:18px;font-weight:500;}
+
+    .title{font-size:60px;font-weight:700;line-height:1.1;}
+
+    .title span{
+      display:block;
+      background:linear-gradient(90deg,#1e3a8a,#2563eb,#1d4ed8);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .subtitle{
+      margin-top:10px;
+      font-size:18px;
+      color:#444;
+      min-height:28px; /* 🔥 fix jumping */
+    }
+
+    #typing{
+      display:inline-block;
+      min-width:260px; /* 🔥 reserve space */
+    }
+
+    .buttons{margin-top:20px;display:flex;flex-wrap:wrap;gap:15px;}
+
+    .btn{padding:10px 22px;border-radius:30px;text-decoration:none;font-weight:500;border:2px solid #000;color:#000;background:#fff;}
+
+    /* 🔥 IMAGE */
+    .right{
+      position:relative;
+      margin-left:-160px; /* more left */
+      animation: fadeInRight 1.2s ease forwards;
+    }
+
+    .right img{
+      width:420px;
+      height:auto;
+      object-fit:cover;
+      z-index:2;
+      position:relative;
+    }
+
+    /* 🔥 shadow layers */
+    .right::after{
+      content:"";
+      position:absolute;
+      top:20px;
+      left:40px;
+      width:420px;
+      height:100%;
+      background:url('ashirwad.jpg') no-repeat center/cover;
+      opacity:0.2;
+      filter:grayscale(100%) blur(2px);
+      z-index:1;
+    }
+
+    .right::before{
+      content:"";
+      position:absolute;
+      top:40px;
+      left:80px;
+      width:420px;
+      height:100%;
+      background:url('ashirwad.jpg') no-repeat center/cover;
+      opacity:0.1;
+      filter:grayscale(100%) blur(3px);
+      z-index:0;
+    }
+
+    /* ❌ REMOVE HOVER EFFECT */
+
+    /* 🔥 entry animation */
+    @keyframes fadeInRight{
+      from{
+        opacity:0;
+        transform:translateX(100px);
+      }
+      to{
+        opacity:1;
+        transform:translateX(0);
+      }
+    }
+
+    @media(max-width:900px){
+      .container{flex-direction:column;text-align:center;}
+      .right{margin-left:0;}
+      .right img{margin-top:20px;width:300px;}
+    }
+  
+
+    /* 🔥 text animation */
+    .left{opacity:0;transform:translateY(40px);animation:fadeUp 1s ease forwards;animation-delay:0.3s;}
+
+    @keyframes fadeUp{
+      to{opacity:1;transform:translateY(0);}
+    }
+
+    .title span{
+      animation:slideText 0.8s ease forwards;
+    }
+
+    .title span:nth-child(2){
+      animation-delay:0.2s;
+    }
+
+    @keyframes slideText{
+      from{opacity:0;transform:translateY(30px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+
+    .buttons .btn{
+      opacity:0;
+      transform:translateY(20px);
+      animation:fadeBtn 0.6s ease forwards;
+    }
+
+    .buttons .btn:nth-child(1){animation-delay:0.6s;}
+    .buttons .btn:nth-child(2){animation-delay:0.8s;}
+    .buttons .btn:nth-child(3){animation-delay:1s;}
+    .buttons .btn:nth-child(4){animation-delay:1.2s;}
+
+    @keyframes fadeBtn{
+      to{opacity:1;transform:translateY(0);}
+    }
+
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<div class="cursor-glow"></div>
+<div class="cursor-ring"></div>
+
+<header>
+  <h1>Bihari Balak</h1>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Resume</a>
+    <a href="#">Projects</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<section class="container">
+  <div class="left">
+    <p class="tag">JAI SHRI RAM, DOSTO!</p>
+    <h1 class="title">
+      <span>I'm Ashirwad</span>
+      <span>Shrivastava</span>
+    </h1>
+    <p class="subtitle"><span id="typing"></span></p>
+
+    <div class="buttons">
+      <a href="#" class="btn">Instagram</a>
+      <a href="#" class="btn">Facebook</a>
+      <a href="#" class="btn">LinkedIn</a>
+      <a href="#" class="btn">Email</a>
+    </div>
+  </div>
+
+  <div class="right">
+    <img src="ashirwad.jpg" alt="profile">
+  </div>
+</section>
+
+<script>
+// cursor
+const dot = document.querySelector('.cursor-glow');
+const ring = document.querySelector('.cursor-ring');
+
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+
+  dot.style.left = mouseX + 'px';
+  dot.style.top = mouseY + 'px';
+});
+
+function animateCursor(){
+  ringX += (mouseX - ringX) * 0.15;
+  ringY += (mouseY - ringY) * 0.15;
+
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// 🔥 typing animation (loop)
+const roles = ["Data Analyst","Excel | Power BI | SQL","Dashboard Developer","Data Visualization Expert"];
+let index = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function typeEffect(){
+  const current = roles[index];
+  const display = current.substring(0,charIndex);
+  document.getElementById("typing").textContent = display;
+
+  if(!isDeleting && charIndex < current.length){
+    charIndex++;
+    setTimeout(typeEffect,80);
+  }
+  else if(isDeleting && charIndex > 0){
+    charIndex--;
+    setTimeout(typeEffect,40);
+  }
+  else{
+    isDeleting = !isDeleting;
+    if(!isDeleting){
+      index = (index + 1) % roles.length;
+    }
+    setTimeout(typeEffect,800);
+  }
+}
+
+typeEffect();
+
+// 🔥 Connected dots (network effect)
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+const PARTICLE_COUNT = 70;
+const MAX_DISTANCE = 120;
+let mouse = {x:null,y:null,radius:120};
+let isMouseDown = false;
+
+// track mouse for interaction
+window.addEventListener('mousemove',e=>{
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+window.addEventListener('mouseout',()=>{
+  mouse.x = null;
+  mouse.y = null;
+});
+
+// 🖱️ click detect for attract
+window.addEventListener('mousedown',()=>{isMouseDown = true;});
+window.addEventListener('mouseup',()=>{isMouseDown = false;});
+
+for(let i=0;i<PARTICLE_COUNT;i++){
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    vx: (Math.random()-0.5)*0.7,
+    vy: (Math.random()-0.5)*0.7
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // draw dots
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,2,0,Math.PI*2);
+    ctx.fillStyle = "rgba(37,99,235,0.6)";
+    ctx.fill();
+  });
+
+  // draw lines
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      let dx = particles[i].x - particles[j].x;
+      let dy = particles[i].y - particles[j].y;
+      let dist = Math.sqrt(dx*dx + dy*dy);
+
+      if(dist < MAX_DISTANCE){
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(37,99,235,${1 - dist/MAX_DISTANCE})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function update(){
+  particles.forEach(p=>{
+    // normal movement
+    p.x += p.vx;
+    p.y += p.vy;
+
+    // 🔥 mouse interaction (repel + attract combo)
+    if(mouse.x && mouse.y){
+      let dx = p.x - mouse.x;
+      let dy = p.y - mouse.y;
+      let dist = Math.sqrt(dx*dx + dy*dy);
+
+      if(dist < mouse.radius){
+        let angle = Math.atan2(dy, dx);
+
+        // 🖱️ LEFT CLICK = attract
+        if(isMouseDown){
+          let force = (mouse.radius - dist) / mouse.radius;
+          p.x -= Math.cos(angle) * force * 2.5;
+          p.y -= Math.sin(angle) * force * 2.5;
+        }
+        // 🖱️ NORMAL = repel
+        else{
+          let force = (mouse.radius - dist) / mouse.radius;
+          p.x += Math.cos(angle) * force * 3;
+          p.y += Math.sin(angle) * force * 3;
+        }
+      }
+    }
+
+    // boundary bounce
+    if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+    if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+  });
+}
+
+function animateBG(){
+  draw();
+  update();
+  requestAnimationFrame(animateBG);
+}
+
+animateBG();
+
+</script>
+
+</body>
+</html>
