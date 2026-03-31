@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Ashirwad Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- 🔥 Preload hero image for faster first paint -->
+  <link rel="preload" as="image" href="ashirwad.jpg">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins', sans-serif;}
 
-    body{background:#ffffff;color:#111;overflow-x:hidden;}
+    body{background:#ffffff;color:#111;overflow-x:hidden;min-width:320px;} /* prevent layout break */
 
     header{display:flex;justify-content:space-between;align-items:center;padding:20px 60px;}
     header h1{font-size:28px;font-weight:700;color:#1e3a8a;}
@@ -64,12 +66,14 @@
       position:absolute;top:20px;left:40px;width:420px;height:100%;
       background:url('ashirwad.jpg') no-repeat center/cover;
       opacity:0.2;filter:blur(2px);z-index:1;
+      will-change:transform, opacity; /* hint for smoother render */
     }
     .right::before{
       content:"";
       position:absolute;top:40px;left:80px;width:420px;height:100%;
       background:url('ashirwad.jpg') no-repeat center/cover;
       opacity:0.1;filter:blur(3px);z-index:0;
+      will-change:transform, opacity;
     }
 
     @media(max-width:768px){
@@ -84,8 +88,8 @@
       nav{flex-wrap:wrap;justify-content:center;}
       nav a{font-size:14px;color:#ddd;}
 
-      .container{flex-direction:column;text-align:center;padding:16px;align-items:center;}
-      .left{max-width:100%;display:flex;flex-direction:column;align-items:center;}
+      .container{flex-direction:column;text-align:center;padding:16px;}
+      .left{max-width:100%;}
 
       .tag{color:#fbbf24;font-size:14px;margin-bottom:10px;}
 
@@ -133,10 +137,10 @@ canvas{position:fixed;top:0;left:0;z-index:-1;}
 
 
 /* 🔥 ADVANCED ABOUT */
-.about-advanced{position:relative;padding:100px 60px;overflow:hidden;z-index:1;} /* ensure visible above bg */
-.about-inner{display:flex;align-items:center;justify-content:flex-start;gap:80px;position:relative;z-index:1;margin:0 auto;max-width:1200px;} /* centered & safe */ /* 🔥 shifted right */ /* 🔥 shifted left */
+.about-advanced{position:relative;padding:100px 60px;overflow:visible;z-index:1;width:100%;} /* 🔥 fix desktop mode visibility */ /* ensure visible above bg */
+.about-inner{display:flex;align-items:center;justify-content:flex-start;gap:80px;position:relative;z-index:2;margin:0 auto;max-width:1200px;} /* ensure above bg */ /* centered & safe */ /* 🔥 shifted right */ /* 🔥 shifted left */
 
-.about-left img{width:320px;filter:none;opacity:0;transform:translateX(-50px);transition:1s;}
+.about-left img{width:320px;filter:none;opacity:1;transform:translateX(0);transition:1s;position:relative;z-index:2;} /* always visible */
 
 /* 🔥 hover tilt effect */
 .about-left img:hover{
@@ -148,7 +152,7 @@ canvas{position:fixed;top:0;left:0;z-index:-1;}
   transform:translateX(0) scale(1.02);
 }
 
-.about-right{max-width:500px;opacity:0;transform:translateX(50px);transition:1s;}
+.about-right{max-width:500px;opacity:1;transform:translateX(0);transition:1s;position:relative;z-index:2;color:#111;} /* force visible */ /* always visible */
 
 .about-right h2{font-size:56px;color:#1e3a8a;margin-bottom:10px;} /* bigger title */
 .about-list p{font-size:20px;margin:8px 0;font-weight:600;opacity:1;transform:none;} /* ensure visible */
@@ -179,6 +183,7 @@ canvas{position:fixed;top:0;left:0;z-index:-1;}
   font-weight:700;
   color:rgba(0,0,0,0.05);
   pointer-events:none;
+  z-index:0; /* keep behind */
 }
 
 /* show animation */
@@ -233,7 +238,7 @@ canvas{position:fixed;top:0;left:0;z-index:-1;}
   </div>
 
   <div class="right">
-    <img src="ashirwad.jpg" alt="profile">
+    <img src="ashirwad.jpg" alt="profile" loading="eager" fetchpriority="high" decoding="async" width="420" height="420">
   </div>
 </section>
 
@@ -243,7 +248,7 @@ canvas{position:fixed;top:0;left:0;z-index:-1;}
   <div class="about-inner">
 
     <div class="about-left">
-      <img src="ashirwad.jpg" alt="about">
+      <img src="ashirwad.jpg" alt="about" loading="lazy" decoding="async">
     </div>
 
     <div class="about-right">
@@ -390,13 +395,25 @@ function animate(){draw();update();requestAnimationFrame(animate);} animate();
 
 // 🔥 ABOUT SCROLL ANIMATION
 const aboutSec=document.querySelector('.about-advanced');
-window.addEventListener('scroll',()=>{
+
+function checkAbout(){
   if(!aboutSec) return;
   const rect=aboutSec.getBoundingClientRect();
   if(rect.top < window.innerHeight - 100){
     aboutSec.classList.add('show');
   }
-});
+}
+
+window.addEventListener('scroll', checkAbout);
+window.addEventListener('load', checkAbout); // 🔥 fix for desktop mode
+
+// also run immediately
+checkAbout();
+
+// 🔥 force visible (fix desktop mode issue)
+if(aboutSec){
+  aboutSec.classList.add('show');
+}
 
 });
 </script>
