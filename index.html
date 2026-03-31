@@ -390,13 +390,20 @@ function animate(){draw();update();requestAnimationFrame(animate);} animate();
 
 // 🔥 ABOUT SCROLL ANIMATION
 const aboutSec=document.querySelector('.about-advanced');
-window.addEventListener('scroll',()=>{
+
+function checkAbout(){
   if(!aboutSec) return;
   const rect=aboutSec.getBoundingClientRect();
   if(rect.top < window.innerHeight - 100){
     aboutSec.classList.add('show');
   }
-});
+}
+
+window.addEventListener('scroll', checkAbout);
+window.addEventListener('load', checkAbout); // 🔥 fix for desktop mode
+
+// also run immediately
+checkAbout();
 
 });
 </script>
