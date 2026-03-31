@@ -8,233 +8,131 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins', sans-serif;}
 
-    body{background:#ffffff;color:#111;overflow:hidden;}
+    body{background:#ffffff;color:#111;overflow-x:hidden;}
 
-    canvas{position:fixed;top:0;left:0;z-index:-1;}
+    /* 🔥 HEADER (PC) */
+    header{display:flex;justify-content:space-between;align-items:center;padding:20px 60px;}
+    header h1{font-size:28px;font-weight:700;color:#1e3a8a;}
 
-    /* cursor */
-    .cursor-glow{
-      width:8px;height:8px;border-radius:50%;
-      position:fixed;pointer-events:none;
-      background:#ffffff;
-      transform:translate(-50%,-50%);
-      z-index:1000;
-      box-shadow:0 0 8px #fff, 0 0 16px rgba(255,255,255,0.7);
-      mix-blend-mode:difference;
-    }
-
-    .cursor-ring{
-      width:30px;height:30px;
-      border:2px solid rgba(255,255,255,0.9);
-      border-radius:50%;
-      position:fixed;
-      pointer-events:none;
-      transform:translate(-50%,-50%);
-      z-index:999;
-      mix-blend-mode:difference;
-    }
-
-    /* 🔥 space fix */
-    header{display:flex;justify-content:space-between;align-items:center;padding:5px 60px;}
-
-    header h1{font-size:32px;font-weight:700;color:#1e3a8a;}
-
-    nav a{margin:0 18px;text-decoration:none;color:#555;font-weight:600;font-size:18px;position:relative;transition:0.3s;}
+    nav a{margin:0 15px;text-decoration:none;color:#555;font-weight:600;font-size:18px;position:relative;}
     nav a::after{content:"";position:absolute;width:0;height:2px;background:#2563eb;left:0;bottom:-4px;transition:0.3s;}
     nav a:hover::after{width:100%;}
-    nav a:hover{color:#2563eb;}
 
-    .container{display:flex;align-items:center;justify-content:space-between;padding:20px 60px;}
+    .menu{display:none;}
 
-    .left{max-width:50%;margin-top:-20px;} /* 🔥 remove extra gap */
+      @media(max-width:768px){
+        .menu{display:block;color:#fff;cursor:pointer;}
+      }
 
-    .tag{color:#2563eb;margin-bottom:12px;font-size:18px;font-weight:500;}
+    /* 🔥 MAIN (PC) */
+    .container{display:flex;align-items:center;justify-content:space-between;padding:40px 60px;}
+
+    .left{max-width:50%;}
+
+    .tag{color:#2563eb;font-size:18px;margin-bottom:15px;}
 
     .title{font-size:60px;font-weight:700;line-height:1.1;}
-
     .title span{
       display:block;
-      background:linear-gradient(90deg,#1e3a8a,#2563eb,#1d4ed8);
+      background:linear-gradient(90deg,#1e3a8a,#2563eb);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
     }
 
-    .subtitle{
-      margin-top:10px;
-      font-size:18px;
-      color:#444;
-      min-height:28px; /* 🔥 fix jumping */
+    .subtitle{margin-top:10px;font-size:18px;color:#444;min-height:28px;}
+
+    .buttons{margin-top:25px;display:flex;gap:15px;flex-wrap:wrap;}
+
+    .btn{
+      padding:10px 22px;
+      border-radius:30px;
+      border:2px solid transparent;
+      background:#fff;
+      color:#000;
+      text-decoration:none;
+      transition:0.3s;
     }
 
-    #typing{
-      display:inline-block;
-      min-width:260px; /* 🔥 reserve space */
-    }
+    /* 🔥 Brand Colors (PC) */
+    .btn:nth-child(1){border-color:#E1306C;color:#E1306C;} /* Instagram */
+    .btn:nth-child(2){border-color:#1877F2;color:#1877F2;} /* Facebook */
+    .btn:nth-child(3){border-color:#0A66C2;color:#0A66C2;} /* LinkedIn */
+    .btn:nth-child(4){border-color:#25D366;color:#25D366;} /* WhatsApp */
 
-    .buttons{margin-top:20px;display:flex;flex-wrap:wrap;gap:15px;}
+    .btn:hover{background:#000;color:#fff;border-color:#000;}
+    .btn:hover{background:#000;color:#fff;}
 
-    .btn{padding:10px 22px;border-radius:30px;text-decoration:none;font-weight:500;border:2px solid #000;color:#000;background:#fff;}
+    .right{position:relative;margin-left:-120px;}
+    .right img{width:420px;position:relative;z-index:2;}
 
-    /* 🔥 IMAGE */
-    .right{
-      position:relative;
-      margin-left:-160px; /* more left */
-      animation: fadeInRight 1.2s ease forwards;
-    }
-
-    .right img{
-      width:420px;
-      height:auto;
-      object-fit:cover;
-      z-index:2;
-      position:relative;
-    }
-
-    /* 🔥 shadow layers */
     .right::after{
       content:"";
-      position:absolute;
-      top:20px;
-      left:40px;
-      width:420px;
-      height:100%;
+      position:absolute;top:20px;left:40px;width:420px;height:100%;
       background:url('ashirwad.jpg') no-repeat center/cover;
-      opacity:0.2;
-      filter:grayscale(100%) blur(2px);
-      z-index:1;
+      opacity:0.2;filter:blur(2px);z-index:1;
     }
-
     .right::before{
       content:"";
-      position:absolute;
-      top:40px;
-      left:80px;
-      width:420px;
-      height:100%;
+      position:absolute;top:40px;left:80px;width:420px;height:100%;
       background:url('ashirwad.jpg') no-repeat center/cover;
-      opacity:0.1;
-      filter:grayscale(100%) blur(3px);
-      z-index:0;
+      opacity:0.1;filter:blur(3px);z-index:0;
     }
 
-    /* ❌ REMOVE HOVER EFFECT */
+    /* 🔥 MOBILE ONLY */
+    @media(max-width:768px){
+      body{
+        background:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('ashirwad.jpg') no-repeat center/cover;
+        color:#fff;
+      }
 
-    /* 🔥 entry animation */
-    @keyframes fadeInRight{
-      from{
-        opacity:0;
-        transform:translateX(100px);
+      header{flex-direction:column;gap:8px;padding:12px 16px;}
+      header h1{font-size:22px;color:#fbbf24;}
+
+      nav{flex-wrap:wrap;justify-content:center;display:none;} /* hidden by default on mobile */
+
+      nav.active{display:flex;} /* show when menu clicked */
+      nav a{font-size:14px;color:#ddd;}
+
+      .container{flex-direction:column;text-align:center;padding:16px;align-items:center;}
+      .left{max-width:100%;display:flex;flex-direction:column;align-items:center;}
+
+      .tag{color:#fbbf24;font-size:14px;margin-bottom:10px;}
+
+      .title{font-size:34px;}
+      .title span{background:none;-webkit-text-fill-color:unset;color:#fff;}
+
+      .subtitle{font-size:16px;color:#eee;}
+
+      .buttons{justify-content:center;gap:10px;width:100%;}
+      .btn{
+        width:85%;
+        border:2px solid #fbbf24;
+        color:#fff;
+        background:transparent;
       }
-      to{
-        opacity:1;
-        transform:translateX(0);
-      }
+      .btn:active{background:#000;color:#fff;border-color:#000;}
+
+      .right{display:none;}
+
+      canvas{display:none;}
+      .cursor-dot,.cursor-ring{display:none;}
     }
 
-    @media(max-width:900px){
-      header{flex-direction:column;gap:10px;padding:10px 20px;}
-
-      nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;}
-
-      nav a{font-size:16px;margin:5px;}
-
-      .container{
-        flex-direction:column;
-        text-align:center;
-        padding:20px;
-      }
-
-      .left{
-        max-width:100%;
-        margin-top:0;
-      }
-
-      .title{
-        font-size:40px;
-      }
-
-      .tag{
-        font-size:16px;
-      }
-
-      .subtitle{
-        font-size:16px;
-      }
-
-      .buttons{
-        justify-content:center;
-      }
-
-      .right{
-        margin-left:0;
-        margin-top:20px;
-      }
-
-      .right img{
-        width:260px;
-      }
-
-      .right::after,
-      .right::before{
-        width:260px;
-      }
-    }
-
-    @media(max-width:500px){
-      .title{font-size:32px;}
-      header h1{font-size:24px;}
-      nav a{font-size:14px;}
-    }
-      .right{margin-left:0;}
-      .right img{margin-top:20px;width:300px;}
-    }
-  
-
-    /* 🔥 text animation */
-    .left{opacity:0;transform:translateY(40px);animation:fadeUp 1s ease forwards;animation-delay:0.3s;}
-
-    @keyframes fadeUp{
-      to{opacity:1;transform:translateY(0);}
-    }
-
-    .title span{
-      animation:slideText 0.8s ease forwards;
-    }
-
-    .title span:nth-child(2){
-      animation-delay:0.2s;
-    }
-
-    @keyframes slideText{
-      from{opacity:0;transform:translateY(30px);}
-      to{opacity:1;transform:translateY(0);}
-    }
-
-    .buttons .btn{
-      opacity:0;
-      transform:translateY(20px);
-      animation:fadeBtn 0.6s ease forwards;
-    }
-
-    .buttons .btn:nth-child(1){animation-delay:0.6s;}
-    .buttons .btn:nth-child(2){animation-delay:0.8s;}
-    .buttons .btn:nth-child(3){animation-delay:1s;}
-    .buttons .btn:nth-child(4){animation-delay:1.2s;}
-
-    @keyframes fadeBtn{
-      to{opacity:1;transform:translateY(0);}
-    }
-
+    /* 🔥 CURSOR + BG (PC) */
+    .cursor-dot{width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 8px #fff,0 0 20px rgba(255,255,255,0.9);position:fixed;pointer-events:none;transform:translate(-50%,-50%);z-index:1000;mix-blend-mode:difference;}
+    .cursor-ring{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,0.9);box-shadow:0 0 15px rgba(255,255,255,0.6);position:fixed;pointer-events:none;transform:translate(-50%,-50%);z-index:999;mix-blend-mode:difference;}
+    canvas{position:fixed;top:0;left:0;z-index:-1;}
   </style>
 </head>
 <body>
 
-<canvas id="stars"></canvas>
-<div class="cursor-glow"></div>
+<canvas id="bg"></canvas>
+<div class="cursor-dot"></div>
 <div class="cursor-ring"></div>
 
 <header>
   <h1>Bihari Balak</h1>
+  <div class="menu">☰ MENU</div>
   <nav>
     <a href="#">Home</a>
     <a href="#">About</a>
@@ -254,10 +152,10 @@
     <p class="subtitle"><span id="typing"></span></p>
 
     <div class="buttons">
-      <a href="#" class="btn">Instagram</a>
-      <a href="#" class="btn">Facebook</a>
-      <a href="#" class="btn">LinkedIn</a>
-      <a href="#" class="btn">Email</a>
+      <a href="https://instagram.com/imashirwadshri" target="_blank" class="btn">Instagram</a>
+      <a href="https://facebook.com/imashirwadshri" target="_blank" class="btn">Facebook</a>
+      <a href="https://linkedin.com/in/imashirwadshri" target="_blank" class="btn">LinkedIn</a>
+      <a href="https://wa.me/918252848499" target="_blank" class="btn">WhatsApp</a>
     </div>
   </div>
 
@@ -267,173 +165,105 @@
 </section>
 
 <script>
-// cursor
-const dot = document.querySelector('.cursor-glow');
-const ring = document.querySelector('.cursor-ring');
-
-let mouseX = 0, mouseY = 0;
-let ringX = 0, ringY = 0;
-
-document.addEventListener('mousemove', e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-
-  dot.style.left = mouseX + 'px';
-  dot.style.top = mouseY + 'px';
-});
-
-function animateCursor(){
-  ringX += (mouseX - ringX) * 0.15;
-  ringY += (mouseY - ringY) * 0.15;
-
-  ring.style.left = ringX + 'px';
-  ring.style.top = ringY + 'px';
-
-  requestAnimationFrame(animateCursor);
-}
-animateCursor();
-
-// 🔥 typing animation (loop)
-const roles = ["Data Analyst","Excel | Power BI | SQL","Dashboard Developer","Data Visualization Expert"];
-let index = 0;
-let charIndex = 0;
-let isDeleting = false;
+const roles = ["Data Analyst","Excel | Power BI | SQL","Dashboard Developer"];
+let index = 0, charIndex = 0, isDeleting = false;
 
 function typeEffect(){
   const current = roles[index];
-  const display = current.substring(0,charIndex);
-  document.getElementById("typing").textContent = display;
+  document.getElementById("typing").textContent = current.substring(0,charIndex);
 
   if(!isDeleting && charIndex < current.length){
     charIndex++;
     setTimeout(typeEffect,80);
-  }
-  else if(isDeleting && charIndex > 0){
+  }else if(isDeleting && charIndex > 0){
     charIndex--;
     setTimeout(typeEffect,40);
-  }
-  else{
+  }else{
     isDeleting = !isDeleting;
-    if(!isDeleting){
-      index = (index + 1) % roles.length;
-    }
+    if(!isDeleting) index = (index + 1) % roles.length;
     setTimeout(typeEffect,800);
   }
 }
 
 typeEffect();
 
-// 🔥 Connected dots (network effect)
-const canvas = document.getElementById('stars');
-const ctx = canvas.getContext('2d');
+// cursor
+const dot = document.querySelector('.cursor-dot');
+const ring = document.querySelector('.cursor-ring');
+let mouseX=0,mouseY=0,ringX=0,ringY=0;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-const PARTICLE_COUNT = 70;
-const MAX_DISTANCE = 120;
-let mouse = {x:null,y:null,radius:120};
-let isMouseDown = false;
-
-// track mouse for interaction
-window.addEventListener('mousemove',e=>{
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
+document.addEventListener('mousemove',e=>{
+  mouseX=e.clientX;mouseY=e.clientY;
+  dot.style.left=mouseX+'px';
+  dot.style.top=mouseY+'px';
 });
 
-window.addEventListener('mouseout',()=>{
-  mouse.x = null;
-  mouse.y = null;
-});
-
-// 🖱️ click detect for attract
-window.addEventListener('mousedown',()=>{isMouseDown = true;});
-window.addEventListener('mouseup',()=>{isMouseDown = false;});
-
-for(let i=0;i<PARTICLE_COUNT;i++){
-  particles.push({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    vx: (Math.random()-0.5)*0.7,
-    vy: (Math.random()-0.5)*0.7
-  });
+function animateCursor(){
+  ringX += (mouseX-ringX)*0.12;
+  ringY += (mouseY-ringY)*0.12;
+  ring.style.left=ringX+'px';
+  ring.style.top=ringY+'px';
+  requestAnimationFrame(animateCursor);
 }
+animateCursor();
+
+// bg network (same as before)
+const canvas=document.getElementById('bg');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;} resize();
+window.addEventListener('resize',resize);
+
+let particles=[];let mouse={x:null,y:null,radius:120};let isMouseDown=false;
+window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+window.addEventListener('mouseout',()=>{mouse.x=null;mouse.y=null;});
+window.addEventListener('mousedown',()=>{isMouseDown=true;});
+window.addEventListener('mouseup',()=>{isMouseDown=false;});
+
+const PARTICLE_COUNT=60, MAX_DISTANCE=120;
+for(let i=0;i<PARTICLE_COUNT;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.6,vy:(Math.random()-0.5)*0.6});}
 
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  // draw dots
   particles.forEach(p=>{
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,2,0,Math.PI*2);
-    ctx.fillStyle = "rgba(37,99,235,0.6)";
-    ctx.fill();
+    ctx.beginPath();ctx.arc(p.x,p.y,1.2,0,Math.PI*2);
+    ctx.fillStyle='rgba(37,99,235,0.35)';
+    ctx.shadowColor='rgba(37,99,235,0.5)';ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;
   });
-
-  // draw lines
   for(let i=0;i<particles.length;i++){
     for(let j=i+1;j<particles.length;j++){
-      let dx = particles[i].x - particles[j].x;
-      let dy = particles[i].y - particles[j].y;
-      let dist = Math.sqrt(dx*dx + dy*dy);
-
-      if(dist < MAX_DISTANCE){
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(37,99,235,${1 - dist/MAX_DISTANCE})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
+      let dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+      let dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<MAX_DISTANCE){
+        ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle='rgba(37,99,235,'+(1-dist/MAX_DISTANCE)+')';ctx.lineWidth=0.6;ctx.stroke();
       }
     }
   }
 }
-
 function update(){
   particles.forEach(p=>{
-    // normal movement
-    p.x += p.vx;
-    p.y += p.vy;
-
-    // 🔥 mouse interaction (repel + attract combo)
+    p.x+=p.vx; p.y+=p.vy;
     if(mouse.x && mouse.y){
-      let dx = p.x - mouse.x;
-      let dy = p.y - mouse.y;
-      let dist = Math.sqrt(dx*dx + dy*dy);
-
-      if(dist < mouse.radius){
-        let angle = Math.atan2(dy, dx);
-
-        // 🖱️ LEFT CLICK = attract
-        if(isMouseDown){
-          let force = (mouse.radius - dist) / mouse.radius;
-          p.x -= Math.cos(angle) * force * 2.5;
-          p.y -= Math.sin(angle) * force * 2.5;
-        }
-        // 🖱️ NORMAL = repel
-        else{
-          let force = (mouse.radius - dist) / mouse.radius;
-          p.x += Math.cos(angle) * force * 3;
-          p.y += Math.sin(angle) * force * 3;
-        }
+      let dx=p.x-mouse.x, dy=p.y-mouse.y; let dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<mouse.radius){
+        let angle=Math.atan2(dy,dx), force=(mouse.radius-dist)/mouse.radius;
+        if(isMouseDown){p.x -= Math.cos(angle)*force*2.5; p.y -= Math.sin(angle)*force*2.5;}
+        else{p.x += Math.cos(angle)*force*3; p.y += Math.sin(angle)*force*3;}
       }
     }
-
-    // boundary bounce
-    if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-    if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+    if(p.x<0||p.x>canvas.width)p.vx*=-1; if(p.y<0||p.y>canvas.height)p.vy*=-1;
   });
 }
+function animate(){draw();update();requestAnimationFrame(animate);} animate();
 
-function animateBG(){
-  draw();
-  update();
-  requestAnimationFrame(animateBG);
-}
+// 🔥 MOBILE MENU TOGGLE (only mobile)
+const menuBtn = document.querySelector('.menu');
+const navMenu = document.querySelector('nav');
 
-animateBG();
-
+menuBtn.addEventListener('click', ()=>{
+  navMenu.classList.toggle('active');
+});
 </script>
 
 </body>
