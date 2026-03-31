@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Ashirwad Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- 🔥 Preload hero image for faster first paint -->
+  <link rel="preload" as="image" href="ashirwad.jpg">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins', sans-serif;}
 
@@ -64,12 +66,14 @@
       position:absolute;top:20px;left:40px;width:420px;height:100%;
       background:url('ashirwad.jpg') no-repeat center/cover;
       opacity:0.2;filter:blur(2px);z-index:1;
+      will-change:transform, opacity; /* hint for smoother render */
     }
     .right::before{
       content:"";
       position:absolute;top:40px;left:80px;width:420px;height:100%;
       background:url('ashirwad.jpg') no-repeat center/cover;
       opacity:0.1;filter:blur(3px);z-index:0;
+      will-change:transform, opacity;
     }
 
     @media(max-width:768px){
@@ -233,7 +237,7 @@ canvas{position:fixed;top:0;left:0;z-index:-1;}
   </div>
 
   <div class="right">
-    <img src="ashirwad.jpg" alt="profile" loading="lazy" decoding="async">
+    <img src="ashirwad.jpg" alt="profile" loading="eager" fetchpriority="high" decoding="async" width="420" height="420">
   </div>
 </section>
 
